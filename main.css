@@ -1,0 +1,155 @@
+@font-face {
+    font-family: 'tech-font';
+    src: url('Font/w95fa.woff2') format('woff2'),
+         url('Font/w95fa.woff') format('woff'),
+         url('Font/W95FA.otf') format('otf');
+  }
+
+body {
+    background-image: url("background.jpeg");
+    font-family: "tech-font";
+    color: rgb(164, 95, 164)
+}
+/* HEADER */
+#header {
+    text-align: center;
+    
+}
+#title {
+    color: rgb(164, 95, 164);
+}
+h2 {
+    color: rgb(164, 95, 164);
+}
+
+
+.row {
+    text-align: center;
+    display: flex;
+}
+/* LEFT COLUMN */
+#column1 {
+    height: 90vh;
+    margin:  30px ;
+    border-radius: 10%;
+    box-shadow: 10px 10px hsl(191, 64%, 85%);
+    text-align: center;
+    background-color: rgba(19, 4, 14, 0.9);
+    flex: 50%;
+    color: rgb(251, 253, 250);
+}
+#title {
+    font-size: 4em;
+    margin: 0;
+    margin-bottom: 10px;
+    margin-top: 20px;
+    font-weight:bolder;
+}
+table {
+    border-collapse:separate;
+    border-spacing:0 0px;
+ }
+ td {
+    width:150px;
+    text-align:center;
+    border:1px solid hsl(191, 64%, 80%);
+    border-top: none;
+    border-bottom: none;
+    padding:10px
+ }
+ th {
+    border:1px solid hsl(191, 64%, 80%);
+    border-top: none;
+    border-bottom: none;
+    padding:10px
+
+ }
+
+hr {
+    background-color: hsl(191, 64%, 80%);
+    border: 0px;
+    border-radius: 5%;
+    border-top: 20px;
+    border-top-right-radius: 50%;
+    border-top-left-radius: 50%;
+    border-bottom: 20px;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    width: 90%;
+    height : 4px;
+}
+.column2 {
+    height: 90vh;
+    margin: 30px;
+    flex: 50%;
+    flex-direction: column;
+    display: flex;
+}
+.progressByUser text {
+    display:none;
+}
+.progressByUser g:hover text {
+    display: block;
+    fill: white
+}
+.projectTransaction text {
+    display:none;
+}
+.projectTransaction g:hover text {
+    display: block;
+    fill: white
+}
+
+/* TOP RIGHT BOX */
+.progressByUser {
+    height:48%;
+    width:100%;
+    border-radius: 10%;
+    margin-bottom: 10px;
+    box-shadow: 8px 13px hsl(191, 64%, 80%);
+    background-color: rgba(19, 4, 14, 0.9);;
+    position: relative;
+}
+
+
+.line-js{
+    margin: 0 auto;
+ position: absolute;
+ bottom: 5%;
+ left: 5%;
+}
+
+/* BOTTOM RIGHT BOX */
+.projectTransaction {
+    height:48%;
+    width:100%;
+    border-radius: 10%;
+    margin-top: 20px;
+    box-shadow: 8px 10px hsl(191, 64%, 80%);
+    background-color: rgba(19, 4, 14, 0.9);;
+    position: relative;
+}
+
+.bar-js {
+ margin: 0 auto;
+ position: absolute;
+ bottom: 5%; 
+ left: 5%;
+}
+  
+  /* .graph .labels.x-labels {
+    text-anchor: middle;
+  }
+  
+  .graph .labels.y-labels {
+    text-anchor: end;
+  } */
+  .graph {
+    height: 80%;
+    width: 80%;
+  }
+  .graph .grid {
+    stroke: #ccc;
+    stroke-dasharray: 0;
+    stroke-width: 2;
+  }
