@@ -10,16 +10,27 @@
       
     </style>
 </head>
-<script src="graphql.js"></script>
-<body>
+<script src="graphql.js">
+</script>
+<body onload="onLoad()">
    <div id = "header">
-       
+      <h2>Login</h2>
+
+      <h3>Username</h3>
+  <input type="text" id="username" label="username">
+  <h3>Password</h3>
+  <input type="password" id="password" label="password">
+  <br>
+  <br>
+ <input type="submit" onclick="getToken()">
+  
    </div>
    
    <div class = "row">
      <div id="column1">
       <div id="profileContent">
          <h1 id="title">Hannah.Alemu</h1>
+         <button type="submit" onclick="Logout()">Logout</button>
          <p id = "id">id</p>
          <p id = "xp">current xp</p>
          <p id = "lastSub">last submitted project</p>

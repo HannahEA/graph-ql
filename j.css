@@ -1,4 +1,4 @@
-/* .App{font-size:.5rem;color:var(--color100);letter-spacing:1px}
+.App{font-size:.5rem;color:var(--color100);letter-spacing:1px}
 .Header{
     display:flex;
     justify-content:center;
@@ -119,4 +119,4 @@ span{opacity:.5}
 @media only screen and (min-width: 500px){.App{font-size:.8rem}
 .category{font-size:1.5vw}}
 .scrollbar-hidden::-webkit-scrollbar{display:none}
-.scrollbar-hidden{-ms-overflow-style:none;scrollbar-width:none} */
+.scrollbar-hidden{-ms-overflow-style:none;scrollbar-width:none}

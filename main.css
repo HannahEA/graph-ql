@@ -8,10 +8,11 @@
 body {
     background-image: url("background.jpeg");
     font-family: "tech-font";
-    color: rgb(164, 95, 164)
+    color: rgb(154, 89, 154)
 }
 /* HEADER */
 #header {
+    margin: 5%;
     text-align: center;
     
 }
@@ -25,7 +26,7 @@ h2 {
 
 .row {
     text-align: center;
-    display: flex;
+    display: none;
 }
 /* LEFT COLUMN */
 #column1 {
@@ -37,6 +38,7 @@ h2 {
     background-color: rgba(19, 4, 14, 0.9);
     flex: 50%;
     color: rgb(251, 253, 250);
+    overflow: scroll;
 }
 #title {
     font-size: 4em;
@@ -45,9 +47,16 @@ h2 {
     margin-top: 20px;
     font-weight:bolder;
 }
+.project {
+    overflow: scroll;
+    justify-content: center;
+    align-content: center;
+}
 table {
     border-collapse:separate;
     border-spacing:0 0px;
+   justify-content: center;
+    
  }
  td {
     width:150px;

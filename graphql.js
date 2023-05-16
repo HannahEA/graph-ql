@@ -1,41 +1,104 @@
-var myTokenHeaders = new Headers();
-myTokenHeaders.append("Authorization", "Basic SGFubmFoLkFsZW11OkVtZXJhbGRmbHky");
+function onLoad() {
+    if (getTokenFromCookie() != "") {
+       // if cookie exists query databse using token from cookie
+          queryDatabase(getTokenFromCookie())
+    } 
+}
 
-var requestOptions1 = {
-  method: 'POST',
-  headers: myTokenHeaders,
-  redirect: 'follow'
-};
-const Token = fetch("https://learn.01founders.co/api/auth/signin", requestOptions1)
-.then(response => response.text())
-.catch(error => console.log('error', error));
-
-(async() => {
-var myQueryHeaders = new Headers();
-myQueryHeaders.append("Content-Type", "application/json");
-myQueryHeaders.append("Authorization", `Bearer ${(await Token).replaceAll('"', "")}`);
-
-var graphql = JSON.stringify({
-    query: `query { 
-        userdata: user(where: {login: {_eq: \"Hannah.Alemu\"}}) {\n                login\n                id\n            }\n            progressByUser: progress(\n                where: {_and: [{user: {login: {_eq: \"Hannah.Alemu\"}}}, {object: {type: {_eq: \"project\"}}}, {isDone: {_eq: true}}, {grade: {_neq: 0}}]}\n                order_by: {updatedAt: asc}\n            ) {\n                id\n                grade\n                createdAt\n                updatedAt\n                object {\n                    id\n                    name\n                }\n            }\n            projectTransaction: transaction(\n                where: {_and: [{user: {login: {_eq: \"Hannah.Alemu\"}}}, {object: {type: {_eq: \"project\"}}}, {type: {_eq: \"xp\"}}]}\n                order_by: {amount: desc}\n            ) {\n                amount\n                createdAt\n                object {\n                    id\n                    name\n                }\n            }\n        }`,
-        variables: {}
+function getTokenFromCookie() {
+    let cookies = document.cookie
+    if (cookies != "") {
+    var elements = document.cookie.split(';');
+    console.log(elements)
+    for (var i = 0; i < elements.length; i++) {
+        var isCookie = elements[i].includes('Hannah.Alemu');
+        if (isCookie) {
+            let cookie = elements[i].split('=')
+            console.log(cookie)
+            //return token value
+            return cookie[1]
+        }
+        return ""
+        
+    }
+    }
+    return ""
+}
+function createCookie(Token) {
+    //set cookie name to username, value to token string
+    Token.then((t) => {
+        document.cookie = `Hannah.Alemu=${t.replaceAll('"', "")}`
     })
-    var requestOptions2 = {
-        method: 'POST',
-        headers: myQueryHeaders,
-        body: graphql,
-        redirect: 'follow'
-    };
-    
+}
 
-fetch("https://learn.01founders.co/api/graphql-engine/v1/graphql", requestOptions2)
-  .then(response => response.json())
-  .then(response => {console.log(response), createProfile(response)})
-  .catch(error => console.log('error', error))
-})();
+function getToken() {
+   // attempt to fetch token using given credentials
+    var myTokenHeaders = new Headers();
+    let username = document.getElementById("username").value
+    let password = document.getElementById("password").value
+    console.log("Basic " +btoa(`${username}:${password}`))
+    myTokenHeaders.append("Authorization", "Basic " + btoa(`${username}:${password}`));
+    var requestOptions1 = {
+    method: 'POST',
+     headers: myTokenHeaders,
+     redirect: 'follow'
+    }; 
+    const Token = fetch("https://learn.01founders.co/api/auth/signin", requestOptions1)
+        .then(response => response.text())
+        .catch(error => {console.log('error', error);  alert("Incorrect Username or Password")});
+    // query database using generated token
+    queryDatabase(Token)
+   
+} 
+function queryDatabase(Token) {
+    (async() => {
+       
+        var myQueryHeaders = new Headers();
+        myQueryHeaders.append("Content-Type", "application/json");
+        myQueryHeaders.append("Authorization", `Bearer ${(await Token).replaceAll('"', "")}`);
+        
+        var graphql = JSON.stringify({
+            query: `query { 
+                userdata: user(where: {login: {_eq: \"Hannah.Alemu\"}}) {\n                login\n                id\n            }\n            progressByUser: progress(\n                where: {_and: [{user: {login: {_eq: \"Hannah.Alemu\"}}}, {object: {type: {_eq: \"project\"}}}, {isDone: {_eq: true}}, {grade: {_neq: 0}}]}\n                order_by: {updatedAt: asc}\n            ) {\n                id\n                grade\n                createdAt\n                updatedAt\n                object {\n                    id\n                    name\n                }\n            }\n            projectTransaction: transaction(\n                where: {_and: [{user: {login: {_eq: \"Hannah.Alemu\"}}}, {object: {type: {_eq: \"project\"}}}, {type: {_eq: \"xp\"}}]}\n                order_by: {amount: desc}\n            ) {\n                amount\n                createdAt\n                object {\n                    id\n                    name\n                }\n            }\n        }`,
+                variables: {}
+            })
+            var requestOptions2 = {
+                method: 'POST',
+                headers: myQueryHeaders,
+                body: graphql,
+                redirect: 'follow'
+            };
+            
+        
+        fetch("https://learn.01founders.co/api/graphql-engine/v1/graphql", requestOptions2)
+          .then(response => response.json())
+          .then(response => {
+            //if token failed to generate, oject of errors is returned
+            if (typeof response.errors == "object") {
+                // show user an alert and throw an error to prevent page load attempt
+                alert("incorrect username or password")
+                throw new Error("Incorrect Username or Password")
+            }
+            console.log(response); 
+            //if no token error and a cookie has not been created -> create cookie 
+            if (getTokenFromCookie() == "") {
+                createCookie(Token)
+            }
+            //load page
+            createProfile(response);})
+          .catch(error => {console.log('error', error); })
+        })();
+
+}
 
 
  function createProfile(datas) {
+    let page = document.getElementsByClassName("row")[0]
+    let login = document.getElementById("header")
+    console.log(page)
+    login.style.display = "none"
+    page.style.display = "flex"
+
     let user = datas.data.userdata
     let progressData = datas.data.progressByUser
     let best = 0
@@ -69,7 +132,7 @@ fetch("https://learn.01founders.co/api/graphql-engine/v1/graphql", requestOption
     let table = document.getElementById("projectTable") 
     let len = prog.length
     let j = 0
-    for (let i = len-4; i<len; i++) {
+    for (let i = len-1; i>len-8; i--) {
         let row = document.createElement("tr")
         let cell1 = document.createElement("td")
         cell1.innerHTML = prog[i].object.name
@@ -230,8 +293,32 @@ function createLine(prog, proj) {
             }
         }
     }
-    
-
 
 }
 
+function Logout() {
+    let page = document.getElementsByClassName("row")[0]
+    let login = document.getElementById("header")
+    console.log(page)
+    login.style.display = "block"
+    page.style.display = "none"
+    deleteCookie()
+
+}
+
+function deleteCookie() {
+    var elements = document.cookie.split(';');
+    console.log(elements)
+    for (var i = 0; i < elements.length; i++) {
+        var isCookie = elements[i].includes('Hannah.Alemu');
+        if (isCookie) {
+            let cookie = elements[i].split('=')
+            console.log(cookie)
+            //delete cookie
+            document.cookie = "Hannah.Alemu=; max-age=-1"
+        }
+       
+        
+    }
+
+}
